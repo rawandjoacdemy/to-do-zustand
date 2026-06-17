@@ -1,7 +1,9 @@
 "use client";
 import Filter from "@/components/filter";
 import SearchBar from "@/components/search-bar";
+import { useTaskStore } from "@/store/tasksStore";
 import { searchTasks } from "@/utils/helpers";
+import Link from "next/link";
 import { useRef, useState } from "react";
 
 interface Task {
@@ -11,11 +13,13 @@ interface Task {
 }
 
 export default function Home() {
-  const [tasksList, setTasksList] = useState<Task[]>([]);
+  const tasksList = useTaskStore((state) => state.tasks);
+  const addTask = useTaskStore((state) => state.addTask);
+  const removeTask = useTaskStore((state) => state.removeTask);
+  const toggleTask = useTaskStore((state) => state.toggleTask);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
-  const [tasksCounter, setTasksCounter] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -30,6 +34,13 @@ export default function Home() {
     task.text.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
+  function handleAdd() {
+    if (!inputRef.current) return;
+
+    addTask(inputRef.current.value);
+    inputRef.current.value = "";
+  }
+
   function handleSearch(query: string) {
     setSearchQuery(query);
   }
@@ -38,37 +49,11 @@ export default function Home() {
     setFilterStatus(e.target.value);
   }
 
-  function handleCheckbox(id: number) {
-    const tasks = tasksList.map((task) =>
-      task.id === id ? { ...task, isDone: !task.isDone } : task,
-    );
-    setTasksList(tasks);
-  }
-
-  function addTask(taskText: string) {
-    const taskItem = {
-      id: Date.now(),
-      text: taskText,
-      isDone: false,
-    };
-    setTasksList([...tasksList, taskItem]);
-    if (inputRef.current) {
-      inputRef.current.value = "";
-    }
-    setTasksCounter(tasksCounter + 1);
-  }
-
-  function removeTask(id: number) {
-    const taskItems = tasksList.filter((task) => task.id !== id);
-    setTasksList(taskItems);
-    setTasksCounter(tasksCounter - 1);
-  }
-
   return (
     <>
       <h1>ToDo List</h1>
 
-      <div>Tasks Counter: {tasksCounter}</div>
+      <div>Tasks Counter: {tasksList.length}</div>
       <div>
         <Filter onFilter={handleFilter} />
       </div>
@@ -79,7 +64,7 @@ export default function Home() {
       <h2>To Do</h2>
       <div>
         <input ref={inputRef} type="text" placeholder="task name" />
-        <button onClick={() => addTask(inputRef.current!.value)}>add</button>
+        <button onClick={() => handleAdd()}>add</button>
       </div>
       <div>
         <ul>
@@ -90,10 +75,10 @@ export default function Home() {
                   <input
                     type="checkbox"
                     onChange={() => {
-                      handleCheckbox(task.id);
+                      toggleTask(task.id);
                     }}
                   />{" "}
-                  {task.text}
+                  <Link href={`/toggle/${task.id}`}>{task.text}</Link>
                   <button onClick={() => removeTask(task.id)}>delete</button>
                 </li>
               );
@@ -112,11 +97,11 @@ export default function Home() {
                   <input
                     type="checkbox"
                     onChange={() => {
-                      handleCheckbox(task.id);
+                      toggleTask(task.id);
                     }}
                     checked={task.isDone}
                   />{" "}
-                  {task.text}{" "}
+                  <Link href={`/toggle/${task.id}`}>{task.text}</Link>
                   <button onClick={() => removeTask(task.id)}>delete</button>
                 </li>
               );
