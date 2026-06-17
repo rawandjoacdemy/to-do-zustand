@@ -1,17 +1,18 @@
-function Search(list: string[], query) {
-  const searchResult = list.filter((item) => {
-    item.includes(query);
-  });
-  return searchResult;
+interface Props {
+  value: string;
+  onSearch: (e: string) => void;
 }
 
-
-export default function SearchBar(query, onSearch) {
-
+export default function SearchBar({ value, onSearch }: Props) {
   return (
     <>
       <div>
-        <input type="text" placeholder="search task" onChange={handleSearch}/>
+        <input
+          type="text"
+          value={value}
+          onChange={(e) => onSearch(e.target.value)}
+          placeholder="search task"
+        />
       </div>
     </>
   );
