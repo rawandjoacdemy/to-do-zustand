@@ -1,7 +1,8 @@
+import { randomUUID } from "crypto";
 import { create } from "zustand";
 
 interface Task {
-  id: number;
+  id: string;
   text: string;
   isDone: boolean;
 }
@@ -10,26 +11,26 @@ type TaskStore = {
   tasks: Task[];
 
   addTask: (text: string) => void;
-  removeTask: (id: number) => void;
-  toggleTask: (id: number) => void;
+  removeTask: (id: string) => void;
+  toggleTask: (id: string) => void;
 };
 
 export const useTaskStore = create<TaskStore>((set) => ({
   tasks: [],
   addTask: (text) =>
     set((state) => ({
-      tasks: [...state.tasks, { id: Date.now(), text, isDone: false }],
+      tasks: [...state.tasks, { id: crypto.randomUUID(), text, isDone: false }],
     })),
 
   removeTask: (id) =>
     set((state) => ({
-      tasks: state.tasks.filter((t) => t.id !== id),
+      tasks: state.tasks.filter((task) => task.id !== id),
     })),
 
   toggleTask: (id) =>
     set((state) => ({
-      tasks: state.tasks.map((t) =>
-        t.id === id ? { ...t, isDone: !t.isDone } : t,
+      tasks: state.tasks.map((task) =>
+        task.id === id ? { ...task, isDone: !task.isDone } : task,
       ),
     })),
 }));

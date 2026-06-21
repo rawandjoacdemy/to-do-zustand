@@ -9,26 +9,70 @@ export default function TogglePage() {
   const tasks = useTaskStore((state) => state.tasks);
   const toggleTask = useTaskStore((state) => state.toggleTask);
 
-  const taskId = Number(slug);
+  const taskId = slug;
 
-  const task = tasks.find((t) => t.id === taskId);
+  const task = tasks.find((task) => task.id === taskId);
 
   if (!task) {
     return <div>Task not found</div>;
   }
 
   return (
-    <div>
-      <h1>{task.text}</h1>
+    <div
+      className="min-h-screen bg-[#faf6ee] relative overflow-hidden"
+      style={{ fontFamily: "'Kalam'" }}
+    >
+      {/* background */}
+      <div
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(transparent, transparent 31px, #2c241612 31px, rgba(44,36,22,0.07) 32px)",
+          backgroundSize: "100% 32px",
+        }}
+      />
+      <div className="absolute top-0 bottom-0 left-16 md:left-24 w-px bg-red-300/50 " />
 
-      <label>
+      <div className="relative max-w-2xl my-40 mx-auto p-10 flex  gap-10 items-center bg-[#fffdf5] rounded-xl">
+        <h1 className="text-4xl">Task Status:</h1>
+        <h1 className="text-2xl font-bold">{task.text}</h1>
+
         <input
           type="checkbox"
           checked={task.isDone}
           onChange={() => toggleTask(task.id)}
+          className="peer hidden"
         />
-        Done
-      </label>
+        <div
+          onClick={() => toggleTask(task.id)}
+          className="relative flex-shrink-0 w-6 h-6 cursor-pointer"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-full h-full"
+          >
+            <path
+              d="M3 4 C3 3, 4 2, 5 2 L19 2.5 C20 2.5 21 3.5 21 4.5 L21.5 19 C21.5 20 20.5 22 19.5 22 L4.5 21.5 C3.5 21.5 2.5 20.5 2.5 19.5 Z"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinejoin="round"
+              className="text-amber-700/50 hover:text-amber-700 transition-colors"
+            />
+
+            {task.isDone && (
+              <path
+                d="M6 12 L10 16 L18 7"
+                stroke="#c0392b"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            )}
+          </svg>
+        </div>
+      </div>
     </div>
   );
 }

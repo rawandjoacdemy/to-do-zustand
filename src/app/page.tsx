@@ -8,12 +8,11 @@ import {
   DoodleHeart,
   DoodleStar,
 } from "@/ui/doodles";
-import { searchTasks } from "@/utils/helpers";
 import Link from "next/link";
 import { useRef, useState } from "react";
 
 interface Task {
-  id: number;
+  id: string;
   text: string;
   isDone: boolean;
 }
@@ -26,15 +25,28 @@ export default function Home() {
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
-  const [darkMode, setDarkMode] = useState(false);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const filteredTasks = searchTasks(tasksList, searchQuery);
-  const todoTasks = filteredTasks.filter((task: Task) => !task.isDone);
-  const doneTasks = filteredTasks.filter((task: Task) => task.isDone);
-  const searchedToDo = searchTasks(todoTasks, searchQuery);
-  const searchedDone = searchTasks(doneTasks, searchQuery);
+  const { todoTasks, doneTasks } = tasksList.reduce(
+    (acc, task: Task) => {
+      if (!task.text.toLowerCase().includes(searchQuery.toLowerCase())) {
+        return acc;
+      }
+
+      if (task.isDone) {
+        acc.doneTasks.push(task);
+      } else {
+        acc.todoTasks.push(task);
+      }
+
+      return acc;
+    },
+    {
+      todoTasks: [] as Task[],
+      doneTasks: [] as Task[],
+    },
+  );
 
   const total = tasksList.length;
   const done = doneTasks.length;
@@ -78,7 +90,7 @@ export default function Home() {
       <DoodleCircle className="absolute bottom-32 left-4 w-14 h-14 text-amber-500/30 pointer-events-none" />
       <DoodleStar className="absolute top-1/2 right-6 w-6 h-6 text-amber-600/30 pointer-events-none" />
 
-      <div className="relative z-10 max-w-2xl mx-auto px-6 pl-20 md:pl-28 py-10">
+      <div className="relative z-10 max-w-2xl my-10 mx-auto px-6 pl-20 md:pl-28 py-10 my-10">
         <h1
           className="text-5xl leading-tight font-[700]"
           style={{ fontFamily: "'Caveat'" }}
@@ -86,7 +98,11 @@ export default function Home() {
           To do list
         </h1>
 
-        <div className="mb-8 bg-card rounded-2xl p-5 border border-border/60 shadow-sm relative overflow-hidden">
+        <DoodleFlower className="absolute top-6 right-8 w-14 h-14 text-amber-400/50 pointer-events-none" />
+        <DoodleHeart className="absolute bottom-6 left-8 w-14 h-14 text-amber-400/50 pointer-events-none" />
+        <DoodleStar className="absolute top-1/2 right-6 w-6 h-6 text-red-400/40 pointer-events-none" />
+
+        <div className="mb-8 bg-[#fffdf5] rounded-2xl p-5 border border-[#2c241626]/60 shadow-sm relative overflow-hidden">
           <div className="flex items-end justify-between mb-3">
             <span className="text-[#2c2416] text-xl  font-[var(--font-caveat)] font-[700]">
               Progress
@@ -97,7 +113,7 @@ export default function Home() {
           </div>
           {/* Progress bar */}
           <div className="relative h-5">
-            <div className="absolute inset-0 rounded-full border border-border" />
+            <div className="absolute inset-0 rounded-full border border-[#2c241626]" />
             {/* Fill */}
             <div
               className="absolute top-0.5 left-0.5 bottom-0.5 bg-[#C1392A] transition-all duration-500"
@@ -128,7 +144,7 @@ export default function Home() {
           <div>
             <h2 className="mb-4">To Do</h2>
             <ul>
-              {searchedToDo.map((task: Task) => {
+              {todoTasks.map((task: Task) => {
                 return (
                   <li
                     key={task.id}
@@ -206,7 +222,7 @@ export default function Home() {
             <h2 className="my-4">Done</h2>
             <ul>
               {" "}
-              {searchedDone.map((task: Task) => {
+              {doneTasks.map((task: Task) => {
                 return (
                   <li
                     key={task.id}
