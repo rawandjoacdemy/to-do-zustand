@@ -34,11 +34,7 @@ export default function Home() {
         return acc;
       }
 
-      if (task.isDone) {
-        acc.doneTasks.push(task);
-      } else {
-        acc.todoTasks.push(task);
-      }
+      task.isDone ? acc.doneTasks.push(task) : acc.todoTasks.push(task);
 
       return acc;
     },
@@ -69,28 +65,29 @@ export default function Home() {
 
   return (
     <div
-      className="min-h-screen bg-[#faf6ee] relative overflow-hidden"
+      className="min-h-screen bg-[#faf6ee] relative"
       style={{ fontFamily: "'Kalam'" }}
     >
       {/* background */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0"
         style={{
           backgroundImage:
             "repeating-linear-gradient(transparent, transparent 31px, #2c241612 31px, rgba(44,36,22,0.07) 32px)",
           backgroundSize: "100% 32px",
         }}
       />
+      {/* vertical red line  */}
       <div className="absolute top-0 bottom-0 left-16 md:left-24 w-px bg-red-300/50 " />
 
       {/* background doodles */}
-      <DoodleFlower className="absolute top-6 right-8 w-14 h-14 text-amber-400/50 pointer-events-none" />
-      <DoodleStar className="absolute top-20 right-24 w-8 h-8 text-red-400/40 pointer-events-none" />
-      <DoodleHeart className="absolute bottom-16 right-12 w-10 h-10 text-pink-400/40 pointer-events-none" />
-      <DoodleCircle className="absolute bottom-32 left-4 w-14 h-14 text-amber-500/30 pointer-events-none" />
-      <DoodleStar className="absolute top-1/2 right-6 w-6 h-6 text-amber-600/30 pointer-events-none" />
+      <DoodleFlower className="absolute top-6 right-8 w-14 h-14 text-amber-400/50" />
+      <DoodleStar className="absolute top-20 right-24 w-8 h-8 text-red-400/40" />
+      <DoodleHeart className="absolute bottom-16 right-12 w-10 h-10 text-pink-400/40" />
+      <DoodleCircle className="absolute bottom-32 left-4 w-14 h-14 text-amber-500/30" />
+      <DoodleStar className="absolute top-1/2 right-6 w-6 h-6 text-amber-600/30" />
 
-      <div className="relative z-10 max-w-2xl my-10 mx-auto px-6 pl-20 md:pl-28 py-10 my-10">
+      <div className="relative z-10 max-w-2xl my-10 mx-auto pl-20 md:pl-28 py-10 my-10">
         <h1
           className="text-5xl leading-tight font-[700]"
           style={{ fontFamily: "'Caveat'" }}
@@ -98,16 +95,22 @@ export default function Home() {
           To do list
         </h1>
 
-        <DoodleFlower className="absolute top-6 right-8 w-14 h-14 text-amber-400/50 pointer-events-none" />
-        <DoodleHeart className="absolute bottom-6 left-8 w-14 h-14 text-amber-400/50 pointer-events-none" />
-        <DoodleStar className="absolute top-1/2 right-6 w-6 h-6 text-red-400/40 pointer-events-none" />
+        <DoodleFlower className="absolute top-6 right-8 w-14 h-14 text-amber-400/50 " />
+        <DoodleHeart className="absolute bottom-6 left-8 w-14 h-14 text-amber-400/50" />
+        <DoodleStar className="absolute top-1/2 right-6 w-6 h-6 text-red-400/40" />
 
-        <div className="mb-8 bg-[#fffdf5] rounded-2xl p-5 border border-[#2c241626]/60 shadow-sm relative overflow-hidden">
+        <div className="mb-8 bg-[#fffdf5] rounded-2xl p-5 border border-[#2c241626]/60 shadow-sm overflow-hidden">
           <div className="flex items-end justify-between mb-3">
-            <span className="text-[#2c2416] text-xl  font-[var(--font-caveat)] font-[700]">
+            <span
+              className="text-[#2c2416] text-xl font-[700]"
+              style={{ fontFamily: "'Caveat'" }}
+            >
               Progress
             </span>
-            <span className="text-3xl text-primary font-[var(--font-caveat)] font-[700]">
+            <span
+              className="text-3xl text-[#c0392b]  font-[700]"
+              style={{ fontFamily: "'Caveat'" }}
+            >
               {pct}%
             </span>
           </div>
@@ -119,7 +122,6 @@ export default function Home() {
               className="absolute top-0.5 left-0.5 bottom-0.5 bg-[#C1392A] transition-all duration-500"
               style={{
                 width: `calc(${pct}% - 4px)`,
-                borderRadius: "9999px",
               }}
             />
           </div>
@@ -159,7 +161,7 @@ export default function Home() {
 
                     <div
                       onClick={() => toggleTask(task.id)}
-                      className="relative flex-shrink-0 w-6 h-6 cursor-pointer"
+                      className="flex-shrink-0 w-6 h-6 cursor-pointer"
                     >
                       <svg
                         viewBox="0 0 24 24"
@@ -188,7 +190,7 @@ export default function Home() {
                     </div>
 
                     <div
-                      className={`px-4 py-1 border m-2 w-3/4 inline-block rounded-lg ${
+                      className={`px-4 bg-[#fffdf5] border border-[#2c241626]/60 shadow-sm py-2 border m-2 w-3/4 inline-block rounded-2xl ${
                         task.isDone ? "line-through text-gray-500" : ""
                       }`}
                     >
@@ -207,7 +209,7 @@ export default function Home() {
             </ul>
             {tasksList.length === 0 && (
               <div>
-                <DoodleFlower className=" w-14 h-14 text-amber-400/50 pointer-events-none m-auto" />
+                <DoodleFlower className=" w-14 h-14 text-amber-400/50 m-auto" />
                 <div className="text-[#c1392a8b] w-full text-center">
                   No tasks yet!
                 </div>
@@ -237,7 +239,7 @@ export default function Home() {
 
                     <div
                       onClick={() => toggleTask(task.id)}
-                      className="relative flex-shrink-0 w-6 h-6 cursor-pointer"
+                      className="flex-shrink-0 w-6 h-6 cursor-pointer"
                       aria-label={
                         task.isDone ? "Mark incomplete" : "Mark complete"
                       }
@@ -253,7 +255,7 @@ export default function Home() {
                           stroke="currentColor"
                           strokeWidth="1.5"
                           strokeLinejoin="round"
-                          className="text-amber-700/50 hover:text-amber-700 transition-colors"
+                          className="text-amber-700/50 hover:text-amber-700"
                         />
 
                         {task.isDone && (
@@ -269,7 +271,7 @@ export default function Home() {
                     </div>
 
                     <div
-                      className={`px-4 py-1 border m-2 w-3/4 inline-block rounded-lg ${
+                      className={`px-4 bg-[#fffdf5] border border-[#2c241626]/60 shadow-sm py-2 border m-2 w-3/4 inline-block rounded-2xl ${
                         task.isDone ? "line-through text-gray-500" : ""
                       }`}
                     >
@@ -289,7 +291,7 @@ export default function Home() {
             {/* no tasks  */}
             {doneTasks.length === 0 && (
               <div className="mb-8">
-                <DoodleFlower className=" w-14 h-14 text-amber-400/50 pointer-events-none m-auto" />
+                <DoodleFlower className=" w-14 h-14 text-amber-400/50 m-auto" />
                 <div className="text-[#c1392a8b] w-full text-center">
                   Not done yet!
                 </div>
@@ -300,17 +302,23 @@ export default function Home() {
 
         {/* task input  */}
         <label>Add New Task</label>
-        <div className="flex gap-4 mt-4 border  rounded-xl">
+        <form
+          className="flex gap-4 mt-4 border  rounded-xl"
+          onSubmit={(event) => {
+            event.preventDefault();
+            handleAdd();
+          }}
+        >
           <input
             ref={inputRef}
             type="text"
             placeholder="task name"
             className="w-3/4 p-4 rounded-xl"
           />
-          <button onClick={() => handleAdd()} className="ml-4">
+          <button type="submit" className="ml-4">
             Add Task
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );

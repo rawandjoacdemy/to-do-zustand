@@ -24,7 +24,7 @@ const kalam = Kalam({
 const patrickHand = Patrick_Hand({
   weight: "400",
   subsets: ["latin"],
-  variable: "--font-kalam",
+  variable: "--font-patrick-hand",
 });
 
 export const metadata: Metadata = {

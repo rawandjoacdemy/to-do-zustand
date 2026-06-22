@@ -9,9 +9,7 @@ export default function TogglePage() {
   const tasks = useTaskStore((state) => state.tasks);
   const toggleTask = useTaskStore((state) => state.toggleTask);
 
-  const taskId = slug;
-
-  const task = tasks.find((task) => task.id === taskId);
+  const task = tasks.find((task) => task.id === slug);
 
   if (!task) {
     return <div>Task not found</div>;
@@ -24,7 +22,7 @@ export default function TogglePage() {
     >
       {/* background */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0"
         style={{
           backgroundImage:
             "repeating-linear-gradient(transparent, transparent 31px, #2c241612 31px, rgba(44,36,22,0.07) 32px)",
@@ -33,7 +31,7 @@ export default function TogglePage() {
       />
       <div className="absolute top-0 bottom-0 left-16 md:left-24 w-px bg-red-300/50 " />
 
-      <div className="relative max-w-2xl my-40 mx-auto p-10 flex  gap-10 items-center bg-[#fffdf5] rounded-xl">
+      <div className="relative max-w-2xl my-40 mx-auto p-10 flex gap-10 items-center bg-[#fffdf5] rounded-xl">
         <h1 className="text-4xl">Task Status:</h1>
         <h1 className="text-2xl font-bold">{task.text}</h1>
 
@@ -45,7 +43,7 @@ export default function TogglePage() {
         />
         <div
           onClick={() => toggleTask(task.id)}
-          className="relative flex-shrink-0 w-6 h-6 cursor-pointer"
+          className="flex-shrink-0 w-6 h-6 cursor-pointer"
         >
           <svg
             viewBox="0 0 24 24"
