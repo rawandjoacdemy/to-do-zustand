@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 interface Task {
   id: string;
@@ -14,22 +15,33 @@ type TaskStore = {
   toggleTask: (id: string) => void;
 };
 
-export const useTaskStore = create<TaskStore>((set) => ({
-  tasks: [],
-  addTask: (text) =>
-    set((state) => ({
-      tasks: [...state.tasks, { id: crypto.randomUUID(), text, isDone: false }],
-    })),
+export const useTaskStore = create<TaskStore>()(
+  persist(
+    (set) => ({
+      tasks: [],
 
-  removeTask: (id) =>
-    set((state) => ({
-      tasks: state.tasks.filter((task) => task.id !== id),
-    })),
+      addTask: (text) =>
+        set((state) => ({
+          tasks: [
+            ...state.tasks,
+            { id: crypto.randomUUID(), text, isDone: false },
+          ],
+        })),
 
-  toggleTask: (id) =>
-    set((state) => ({
-      tasks: state.tasks.map((task) =>
-        task.id === id ? { ...task, isDone: !task.isDone } : task,
-      ),
-    })),
-}));
+      removeTask: (id) =>
+        set((state) => ({
+          tasks: state.tasks.filter((task) => task.id !== id),
+        })),
+
+      toggleTask: (id) =>
+        set((state) => ({
+          tasks: state.tasks.map((task) =>
+            task.id === id ? { ...task, isDone: !task.isDone } : task,
+          ),
+        })),
+    }),
+    {
+      name: "tasks-list",
+    },
+  ),
+);

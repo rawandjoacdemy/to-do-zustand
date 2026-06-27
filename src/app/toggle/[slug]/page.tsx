@@ -17,19 +17,9 @@ export default function TogglePage() {
 
   return (
     <div
-      className="min-h-screen bg-[#faf6ee] relative overflow-hidden"
+      className="min-h-screen relative overflow-hidden"
       style={{ fontFamily: "'Kalam'" }}
     >
-      {/* background */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage:
-            "repeating-linear-gradient(transparent, transparent 31px, #2c241612 31px, rgba(44,36,22,0.07) 32px)",
-          backgroundSize: "100% 32px",
-        }}
-      />
-      <div className="absolute top-0 bottom-0 left-16 md:left-24 w-px bg-red-300/50 " />
 
       <div className="relative max-w-2xl my-40 mx-auto p-10 flex gap-10 items-center bg-[#fffdf5] rounded-xl">
         <h1 className="text-4xl">Task Status:</h1>

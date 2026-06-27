@@ -1,12 +1,11 @@
-import { ThemeContext } from "@/app/page";
-import { useContext } from "react";
+import { useTheme } from "@/context/theme-context";
 
 export default function ProgressBar({ tasksList, doneTasks }) {
   const total = tasksList.length;
   const done = doneTasks.length;
   const pct = total === 0 ? 0 : Math.round((done / total) * 100);
-  const { isDarkMode } = useContext(ThemeContext);
- 
+  const { isDarkMode } = useTheme();
+
   return (
     <div
       className={`mb-8 ${isDarkMode ? "bg-black" : " bg-[#faf6ee]"} rounded-2xl p-5 border border-[#2c241626]/60 shadow-sm overflow-hidden`}

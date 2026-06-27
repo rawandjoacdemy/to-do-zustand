@@ -1,16 +1,13 @@
 "use client";
 import Filter from "@/components/filter";
 import SearchBar from "@/components/search-bar";
+import { useTheme } from "@/context/theme-context";
 import { useTaskStore } from "@/store/tasksStore";
-import Background from "@/ui/backgound";
 import Checkbox from "@/ui/checkbox";
 import { DoodleFlower, DoodleHeart, DoodleStar } from "@/ui/doodles";
-import Header from "@/ui/header";
 import ProgressBar from "@/ui/progress-bar";
 import Link from "next/link";
-import { createContext, useRef, useState } from "react";
-
-export const ThemeContext = createContext({});
+import { useRef, useState } from "react";
 
 interface Task {
   id: string;
@@ -22,15 +19,10 @@ export default function Home() {
   const tasksList = useTaskStore((state) => state.tasks);
   const addTask = useTaskStore((state) => state.addTask);
   const removeTask = useTaskStore((state) => state.removeTask);
-  const toggleTask = useTaskStore((state) => state.toggleTask);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  const toggleTheme = () => {
-    setIsDarkMode((prev) => !prev);
-  };
+  const { isDarkMode } = useTheme();
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -54,6 +46,7 @@ export default function Home() {
     if (!inputRef.current || inputRef.current.value === "") return;
 
     addTask(inputRef.current.value);
+    
     inputRef.current.value = "";
   }
 
@@ -66,14 +59,11 @@ export default function Home() {
   }
 
   return (
-    <ThemeContext.Provider value={{ isDarkMode, toggleTheme }}>
       <div
-        className={`min-h-screen relative ${isDarkMode ? "bg-black text-white" : " bg-[#faf6ee]"} `}
+        className={`min-h-screen relative ${isDarkMode ? "text-white" : ""} `}
         style={{ fontFamily: "'Kalam'" }}
       >
-        <Header />
-        {/* background */}
-        <Background />
+       
         <div className="relative z-10 max-w-2xl my-10 mx-auto pl-20 md:pl-28 py-10 my-10">
           <h1
             className="text-5xl leading-tight font-[700]"
@@ -204,6 +194,5 @@ export default function Home() {
           </form>
         </div>
       </div>
-    </ThemeContext.Provider>
   );
 }
