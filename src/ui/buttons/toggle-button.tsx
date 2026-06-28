@@ -5,9 +5,7 @@ export default function ToggleButton() {
 
   return (
     <div className="rounded p-2 border border-[#2c241626]/60 shadow-sm bg-[#fffdf5]">
-      {/* <SunDoodle/> */}
       <button onClick={() => toggleTheme()}> {isDarkMode ? "🌙" : "☀️"}</button>
-      {/* <MoonDoodle/> */}
     </div>
   );
 }

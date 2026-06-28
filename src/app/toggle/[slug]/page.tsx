@@ -2,15 +2,26 @@
 
 import { useParams } from "next/navigation";
 import { useTaskStore } from "@/store/tasksStore";
+import { useEffect } from "react";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 export default function TogglePage() {
   const { slug } = useParams();
+  const router = useRouter();
 
   const tasks = useTaskStore((state) => state.tasks);
   const toggleTask = useTaskStore((state) => state.toggleTask);
 
   const task = tasks.find((task) => task.id === slug);
 
+  useEffect(() => {
+    const token = Cookies.get("auth-token");
+
+    if (!token) {
+      router.push("/login");
+    }
+  }, [router]);
   if (!task) {
     return <div>Task not found</div>;
   }
@@ -20,7 +31,6 @@ export default function TogglePage() {
       className="min-h-screen relative overflow-hidden"
       style={{ fontFamily: "'Kalam'" }}
     >
-
       <div className="relative max-w-2xl my-40 mx-auto p-10 flex gap-10 items-center bg-[#fffdf5] rounded-xl">
         <h1 className="text-4xl">Task Status:</h1>
         <h1 className="text-2xl font-bold">{task.text}</h1>

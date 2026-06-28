@@ -1,9 +1,16 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Caveat, Kalam, Patrick_Hand } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Caveat,
+  Kalam,
+  Patrick_Hand,
+} from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/context/theme-provider";
 import Header from "@/ui/header";
 import Background from "@/ui/backgound";
+import AuthProvider from "@/context/auth-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -47,14 +54,15 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <ThemeProvider>
-          <div className="relative min-h-screen">
-            <Background />
-
-            <div className="relative z-10">
-              <Header />
-              {children}
+          <AuthProvider>
+            <div className="relative min-h-screen">
+              <Background />
+              <div className="relative z-10">
+                <Header />
+                {children}
+              </div>
             </div>
-          </div>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

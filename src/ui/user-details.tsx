@@ -1,18 +1,20 @@
 import Image from "next/image";
-import Cookies from "js-cookie";
 import { useTheme } from "@/context/theme-context";
+import { useAuth } from "@/context/auth-context";
+
 export default function UserDetails() {
-  const username = Cookies.get("username");
   const { isDarkMode } = useTheme();
+  const { username } = useAuth();
+
   return (
     <div className="flex gap-8">
       <Image
         src="/pictures/profile-pic.png"
         alt="user avatar"
-        width={50}
-        height={50}
+        width={40}
+        height={30}
       />
-      <p className={`${isDarkMode ? "text-white" : ""}`}>{username}</p>
+      <p className={isDarkMode ? "text-white" : ""}>{username}</p>
     </div>
   );
 }

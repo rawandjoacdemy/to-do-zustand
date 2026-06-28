@@ -15,10 +15,10 @@ export default function ThemeProvider({ children }) {
   }, []);
 
   const toggleTheme = () => {
-    const next = !isDarkMode;
+    const nextTheme = !isDarkMode;
 
-    setIsDarkMode(next);
-    Cookies.set("theme", next ? "dark" : "light", { expires: 1 });
+    setIsDarkMode(nextTheme);
+    Cookies.set("theme", nextTheme ? "dark" : "light", { expires: 1 });
   };
 
   if (!mounted) return null; 
